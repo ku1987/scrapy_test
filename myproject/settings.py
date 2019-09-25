@@ -91,3 +91,7 @@ ROBOTSTXT_OBEY = True
 
 DOWNLOAD_DELAY = 1
 FEED_EXPORT_ENCODING = 'utf-8'
+
+ITEM_PIPELINES = {
+  'myproject.pipelines.MongoPipeline': 800
+}
