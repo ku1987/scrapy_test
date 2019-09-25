@@ -10,7 +10,7 @@ from pymongo import MongoClient
 class MongoPipeline:
     def open_spider(self, spider):
       self.client = MongoClient('localhost', 27017)
-      self.db = self.client['scraping-book']
+      self.db = self.client['hulu']
       self.collection = self.db['items']
 
     def close_spider(self, spider):
