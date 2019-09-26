@@ -16,7 +16,7 @@ from .settings import START_URLS
 
 # Chrome Driverの実行オプションを設定
 chrome_options = Options()
-# chrome_options.add_argument("--headless")
+chrome_options.add_argument("--headless")
 chrome_options.add_argument('--no-sandbox')
 # chrome_options.binary_location = '/Applications/Google Chrome.app'
 
@@ -32,7 +32,7 @@ class SeleniumMiddleware(object):
         if request.url in START_URLS:
           while True:
             driver.execute_script('scroll(0, document.body.scrollHeight)')
-            time.sleep(2)
+            time.sleep(1)
 
             # loaderが見えなくなったら終了
             element = driver.find_element_by_class_name("vod-mod-loader")

@@ -98,7 +98,7 @@ ITEM_PIPELINES = {
 
 
 START_URLS = [
-    'https://www.hulu.jp/tiles/396',
+    'https://www.hulu.jp/tiles/422',
 ]
 DOWNLOADER_MIDDLEWARES = {
   "myproject.selenium_middleware.SeleniumMiddleware": 0,
