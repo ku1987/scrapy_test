@@ -2,15 +2,16 @@
 from scrapy.spiders import CrawlSpider, Rule
 from myproject.items import Hulu
 from ..settings import START_URLS
+from ..selenium_middleware import close_driver
 
-class HululSpider(CrawlSpider):
+class HuluSpider(CrawlSpider):
     name = 'hulu'
-    allowed_domains = ['www.hulu.co.jp']
-    start_urls = START_URLS
+    allowed_domains = ['www.hulu.jp','hulu.jp']
+    start_urls = START_URLS    
 
     def parse(self, response):
       
-      for url in response.css('vod-mod-tile__item > a::attr("href")'):
+      for url in response.css('.vod-mod-tile__item > a::attr("href")'):
         yield response.follow(url, self.parse_response)
 
     def parse_response(self, response):
@@ -24,3 +25,6 @@ class HululSpider(CrawlSpider):
         detail = response.css('.vod-mod-detail-info02__program-description p').xpath('string()').get(),
       )
       yield item
+
+    def closed(self, reason):
+      close_driver()
