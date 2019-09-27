@@ -17,6 +17,8 @@ NEWSPIDER_MODULE = 'myproject.spiders'
 
 # Crawl responsibly by identifying yourself (and your website) on the user-agent
 #USER_AGENT = 'myproject (+http://www.yourdomain.com)'
+USER_AGENT = 'Mozilla/5.0 (Macintosh; Intel Mac OS X 10_12_3) AppleWebKit/602.4.8 (KHTML, like Gecko) Version/10.0.3 Safari/602.4.8'
+
 
 # Obey robots.txt rules
 ROBOTSTXT_OBEY = True
@@ -83,13 +85,14 @@ ROBOTSTXT_OBEY = True
 
 # Enable and configure HTTP caching (disabled by default)
 # See https://docs.scrapy.org/en/latest/topics/downloader-middleware.html#httpcache-middleware-settings
-#HTTPCACHE_ENABLED = True
+HTTPCACHE_ENABLED = True
 #HTTPCACHE_EXPIRATION_SECS = 0
 #HTTPCACHE_DIR = 'httpcache'
 #HTTPCACHE_IGNORE_HTTP_CODES = []
 #HTTPCACHE_STORAGE = 'scrapy.extensions.httpcache.FilesystemCacheStorage'
 
 DOWNLOAD_DELAY = 1
+
 FEED_EXPORT_ENCODING = 'utf-8'
 
 ITEM_PIPELINES = {
@@ -98,7 +101,7 @@ ITEM_PIPELINES = {
 
 
 START_URLS = [
-    'https://www.hulu.jp/tiles/422',
+    'https://www.hulu.jp/tiles/396',
 ]
 DOWNLOADER_MIDDLEWARES = {
   "myproject.selenium_middleware.SeleniumMiddleware": 0,

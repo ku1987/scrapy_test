@@ -24,3 +24,5 @@ class Hulu(scrapy.Item):
   tag = scrapy.Field()
   year = scrapy.Field()
   detail = scrapy.Field()
+  actor = scrapy.Field()
+  director = scrapy.Field()

@@ -4,6 +4,8 @@ from myproject.items import Hulu
 from ..settings import START_URLS
 from ..selenium_middleware import close_driver
 
+import re
+
 class HuluSpider(CrawlSpider):
     name = 'hulu'
     allowed_domains = ['www.hulu.jp','hulu.jp']
@@ -18,10 +20,15 @@ class HuluSpider(CrawlSpider):
       """
       トピックスのページからタイトルと本文を抜き出す。
       """
+
+      year_str = response.css('.vod-mod-detail-info02__copyright small').xpath('string()').get()
+
       item = Hulu(
-        title = response.css('.vod-mod-detail-info02__title').xpath('string()').get().strip(),
-        tag = response.css('ul.vod-mod-detail-info02__genre > li:first-child').xpath('string()').get().strip(),
-        year = response.css('.vod-mod-detail-info02__copyright small').xpath('string()').get(),
+        title = response.css('.vod-mod-detail-info02__title').xpath('string()').get().strip(),  
+        tag = response.css('ul.vod-mod-detail-info02__genre > li').xpath('string()').extract(),        
+        year = int(re.findall(r'[0-9]{4}', year_str)[0]),
+        actor = response.css('.vod-mod-detail-info02__credit-row:first-child .vod-mod-detail-info02__credit-col:nth-child(1) ul li').xpath('string()').extract(),
+        director = response.css('.vod-mod-detail-info02__credit-col:nth-child(2) ul li').xpath('string()').extract(),        
         detail = response.css('.vod-mod-detail-info02__program-description p').xpath('string()').get(),
       )
       yield item
