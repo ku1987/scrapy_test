@@ -17,10 +17,6 @@ class HuluSpider(CrawlSpider):
         yield response.follow(url, self.parse_response)
 
     def parse_response(self, response):
-      """
-      トピックスのページからタイトルと本文を抜き出す。
-      """
-
       year_str = response.css('.vod-mod-detail-info02__copyright small').xpath('string()').get()
 
       item = Hulu(

@@ -99,10 +99,15 @@ ITEM_PIPELINES = {
   'myproject.pipelines.MongoPipeline': 800
 }
 
+# ITEM_PIPELINES = {
+#   'myproject.pipelines.MySQLPipeline': 800,
+# }
 
 START_URLS = [
-    'https://www.hulu.jp/tiles/396',
+    'https://www.hulu.jp/tiles/422',
+    'https://www.hulu.jp/tiles/424'
 ]
+#396
 DOWNLOADER_MIDDLEWARES = {
   "myproject.selenium_middleware.SeleniumMiddleware": 0,
 }
