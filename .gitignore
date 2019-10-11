@@ -1,3 +1,4 @@
 /.scrapy
 /myproject/__pycache__
 /myproject/spiders/__pycache__
+/myproject/php_test/vendor

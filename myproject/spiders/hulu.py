@@ -19,12 +19,16 @@ class HuluSpider(CrawlSpider):
     def parse_response(self, response):
       year_str = response.css('.vod-mod-detail-info02__copyright small').xpath('string()').get()
 
+      array_tag = response.css('ul.vod-mod-detail-info02__genre > li').xpath('string()').extract()
+      array_actor = response.css('.vod-mod-detail-info02__credit-row:first-child .vod-mod-detail-info02__credit-col:nth-child(1) ul li').xpath('string()').extract()
+      array_director = response.css('.vod-mod-detail-info02__credit-col:nth-child(2) ul li').xpath('string()').extract()
+        
       item = Hulu(
         title = response.css('.vod-mod-detail-info02__title').xpath('string()').get().strip(),  
-        tag = response.css('ul.vod-mod-detail-info02__genre > li').xpath('string()').extract(),        
+        tag = ', '.join(array_tag),        
         year = int(re.findall(r'[0-9]{4}', year_str)[0]),
-        actor = response.css('.vod-mod-detail-info02__credit-row:first-child .vod-mod-detail-info02__credit-col:nth-child(1) ul li').xpath('string()').extract(),
-        director = response.css('.vod-mod-detail-info02__credit-col:nth-child(2) ul li').xpath('string()').extract(),        
+        actor = ', '.join(array_actor),
+        director = ', '.join(array_director),
         detail = response.css('.vod-mod-detail-info02__program-description p').xpath('string()').get(),
       )
       yield item

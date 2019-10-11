@@ -95,19 +95,20 @@ DOWNLOAD_DELAY = 1
 
 FEED_EXPORT_ENCODING = 'utf-8'
 
-ITEM_PIPELINES = {
-  'myproject.pipelines.MongoPipeline': 800
-}
-
 # ITEM_PIPELINES = {
-#   'myproject.pipelines.MySQLPipeline': 800,
+#   'myproject.pipelines.MongoPipeline': 800
 # }
 
+ITEM_PIPELINES = {
+  'myproject.pipelines.MySQLPipeline': 800,
+}
+
 START_URLS = [
-    'https://www.hulu.jp/tiles/422',
     'https://www.hulu.jp/tiles/424'
 ]
-#396
+#396 アニメ映画
+#424 国内ドラマ
+
 DOWNLOADER_MIDDLEWARES = {
   "myproject.selenium_middleware.SeleniumMiddleware": 0,
 }

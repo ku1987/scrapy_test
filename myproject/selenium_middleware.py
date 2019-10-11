@@ -30,15 +30,15 @@ class SeleniumMiddleware(object):
         print(START_URLS)
         #一覧ページに対するrequestの場合のみSeleniumMiddlewareを使う
         if request.url in START_URLS:
-          while True:
+          # while True:
             driver.execute_script('scroll(0, document.body.scrollHeight)')
             time.sleep(1)
 
             # loaderが見えなくなったら終了
-            element = driver.find_element_by_class_name("vod-mod-loader")
+            # element = driver.find_element_by_class_name("vod-mod-loader")
           
-            if not element.is_displayed():
-              break
+            # if not element.is_displayed():
+            #   break
 
         return HtmlResponse(
             driver.current_url,

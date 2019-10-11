@@ -7,17 +7,17 @@
 
 import scrapy
 
-class Headline(scrapy.Item):
-  title = scrapy.Field()
-  body = scrapy.Field()
+# class Headline(scrapy.Item):
+#   title = scrapy.Field()
+#   body = scrapy.Field()
 
-class Restaurant(scrapy.Item):
-  name = scrapy.Field()
-  address = scrapy.Field()
-  latitude = scrapy.Field()
-  longtitude = scrapy.Field()
-  station= scrapy.Field()
-  score = scrapy.Field()
+# class Restaurant(scrapy.Item):
+#   name = scrapy.Field()
+#   address = scrapy.Field()
+#   latitude = scrapy.Field()
+#   longtitude = scrapy.Field()
+#   station= scrapy.Field()
+#   score = scrapy.Field()
 
 class Hulu(scrapy.Item):
   title = scrapy.Field()
