@@ -104,7 +104,7 @@ ITEM_PIPELINES = {
 }
 
 START_URLS = [
-    'https://www.hulu.jp/tiles/424'
+    'https://www.hulu.jp/tiles/396'
 ]
 #396 アニメ映画
 #424 国内ドラマ

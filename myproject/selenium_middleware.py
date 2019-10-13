@@ -20,7 +20,9 @@ chrome_options.add_argument("--headless")
 chrome_options.add_argument('--no-sandbox')
 # chrome_options.binary_location = '/Applications/Google Chrome.app'
 
-driver = webdriver.Chrome(chrome_options=chrome_options, executable_path='/Users/plus/chromedriver')
+driver = webdriver.Chrome(chrome_options=chrome_options, executable_path='/home/ubuntu/crawler/chromedriver')
+# /Users/plus/chromedriver
+# /Users/user/chromedriver
 
 class SeleniumMiddleware(object):
     
@@ -30,15 +32,15 @@ class SeleniumMiddleware(object):
         print(START_URLS)
         #一覧ページに対するrequestの場合のみSeleniumMiddlewareを使う
         if request.url in START_URLS:
-          # while True:
+          while True:
             driver.execute_script('scroll(0, document.body.scrollHeight)')
             time.sleep(1)
 
             # loaderが見えなくなったら終了
-            # element = driver.find_element_by_class_name("vod-mod-loader")
+            element = driver.find_element_by_class_name("vod-mod-loader")
           
-            # if not element.is_displayed():
-            #   break
+            if not element.is_displayed():
+              break
 
         return HtmlResponse(
             driver.current_url,

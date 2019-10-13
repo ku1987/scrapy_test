@@ -24,11 +24,12 @@ import MySQLdb
 class MySQLPipeline:
   def open_spider(self, spider):
     settings = spider.settings
+
     params = {
-      'host':settings.get('MYSQL_HOST', 'localhost'),
-      'db': settings.get('MYSQL_DATABASE', 'hulu_test'),
+      'host':settings.get('MYSQL_HOST', 'scraping.cjxaqn9ex6dq.us-east-1.rds.amazonaws.com'),
+      'db': settings.get('MYSQL_DATABASE', 'scraping'),
       'user': settings.get('MYSQL_USER', 'user'),
-      'passwd': settings.get('MYSQL_PASSWORD', 'user'),
+      'passwd': settings.get('MYSQL_PASSWORD', 'Dj2TFMe4f29zFbUxQsCM'),
       'charset': settings.get('MYSQL_CHARSET', 'utf8mb4'),
     }
     self.conn = MySQLdb.connect(**params)
