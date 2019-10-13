@@ -20,7 +20,7 @@ chrome_options.add_argument("--headless")
 chrome_options.add_argument('--no-sandbox')
 # chrome_options.binary_location = '/Applications/Google Chrome.app'
 
-driver = webdriver.Chrome(chrome_options=chrome_options, executable_path='/home/ubuntu/crawler/chromedriver')
+driver = webdriver.Chrome(chrome_options=chrome_options, executable_path='/home/ubuntu/scraping/scrapy_myproject/myproject/chromedriver')
 # /Users/plus/chromedriver
 # /Users/user/chromedriver
 
