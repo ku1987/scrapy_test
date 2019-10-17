@@ -29,7 +29,7 @@ class HuluSpider(CrawlSpider):
         year = int(re.findall(r'[0-9]{4}', year_str)[0]),
         actor = ', '.join(array_actor),
         director = ', '.join(array_director),
-        detail = response.css('.vod-mod-detail-info02__program-description p').xpath('string()').get(),
+        detail = response.css('.vod-mod-detail-info02__program-description p').xpath('string()').get()
       )
       yield item
 

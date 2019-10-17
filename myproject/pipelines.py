@@ -6,59 +6,84 @@
 # See: https://docs.scrapy.org/en/latest/topics/item-pipeline.html
 
 import MySQLdb
-# from pymongo import MongoClient
+import datetime
 
-# class MongoPipeline:
-#     def open_spider(self, spider):
-#       self.client = MongoClient('localhost', 27017)
-#       self.db = self.client['hulu_drama']
-#       self.collection = self.db['items']
+from orator import DatabaseManager, Model
+from orator import Schema
 
-#     def close_spider(self, spider):
-#       self.client.close()
+config = {
+    'mysql': {
+        'driver': 'mysql',
+        'host': 'localhost',
+        'database': 'hulu_test',
+        'user': 'user',
+        'password': 'user',
+        'prefix': ''
+    }
+}
 
-#     def process_item(self, item, spider):
-#       self.collection.insert_one(dict(item))
-#       return item
+db = DatabaseManager(config)
+schema = Schema(db)
+
+Model.set_connection_resolver(db)
+
+class Drama(Model):
+    __table__ = 'dramas'
+    __timestamps__ = False
 
 class MySQLPipeline:
   def open_spider(self, spider):
-    settings = spider.settings
+    if not schema.has_table('dramas'):
+      with schema.create('dramas') as table:
+        table.increments('id')
+        table.string('title')
+        table.integer('year')
+        table.string('tag')
+        table.string('actor')
+        table.string('director')
+        table.string('detail')
+    # settings = spider.settings
 
-    params = {
-      'host':settings.get('MYSQL_HOST', 'scraping.cjxaqn9ex6dq.us-east-1.rds.amazonaws.com'),
-      'db': settings.get('MYSQL_DATABASE', 'scraping'),
-      'user': settings.get('MYSQL_USER', 'user'),
-      'passwd': settings.get('MYSQL_PASSWORD', 'Dj2TFMe4f29zFbUxQsCM'),
-      'charset': settings.get('MYSQL_CHARSET', 'utf8mb4'),
-    }
-    self.conn = MySQLdb.connect(**params)
-    self.c = self.conn.cursor()
+    # params = {
+    #   'host':settings.get('MYSQL_HOST', 'localhost'),
+    #   # scraping.cjxaqn9ex6dq.us-east-1.rds.amazonaws.com
+    #   'db': settings.get('MYSQL_DATABASE', 'hulu_test'),
+    #   'user': settings.get('MYSQL_USER', 'user'),
+    #   'passwd': settings.get('MYSQL_PASSWORD', 'user'),
+    #   'charset': settings.get('MYSQL_CHARSET', 'utf8mb4'),
+    # }
+    # self.conn = MySQLdb.connect(**params)
+    # self.c = self.conn.cursor()
 
-    self.c.execute('drop table if exists `dramas`')
+    # self.c.execute("""
+    #   create table if not exists `dramas` (
+    #     `id` integer not null auto_increment,
+    #     `title` varchar(255) not null,
+    #     `year` int DEFAULT '1900' not null,
+    #     `tag` varchar(255),
+    #     `actor` varchar(255),
+    #     `director` varchar(255),
+    #     `detail` TEXT,
+    #     primary key(`id`)
+    #   )
+    # """)
+    # self.conn.commit()
 
-    self.c.execute("""
-      create table if not exists `dramas` (
-        `id` integer not null auto_increment,
-        `title` varchar(200) not null,        
-        `year` int DEFAULT '1900' not null,
-        `tag` varchar(255),
-        `actor` varchar(255),
-        `director` varchar(255),
-        `detail` TEXT,
-        primary key(`id`)
-      )
-    """)
-    self.conn.commit()
-
-  def close_spider(self, spider):
-    self.conn.close()
+  # def close_spider(self, spider):
+  #   self.conn.close()
 
   def process_item(self, item, spider):
-    self.c.execute('''
-                  insert into `dramas` (`title`,`year`,`tag`,`actor`,`director`,`detail`) 
-                  values (%(title)s,%(year)s,%(tag)s,%(actor)s,%(director)s,%(detail)s)
-                  ''',
-                  dict(item))
-    self.conn.commit()
-    return item
+    # self.c.execute('''
+    #               insert into `dramas` (`title`,`year`,`tag`,`actor`,`director`,`detail`) 
+    #               values (%(title)s,%(year)s,%(tag)s,%(actor)s,%(director)s,%(detail)s)
+    #               ''',
+    #               dict(item))
+    # self.conn.commit()
+    dramas = Drama()
+    dramas.title = item['title']
+    dramas.year = item['year']
+    dramas.tag = item['tag']
+    dramas.actor = item['actor']
+    dramas.director = item['director']
+    dramas.detail = item['detail']
+    dramas.save()
