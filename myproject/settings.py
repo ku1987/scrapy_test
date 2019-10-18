@@ -91,7 +91,7 @@ HTTPCACHE_ENABLED = True
 #HTTPCACHE_IGNORE_HTTP_CODES = []
 #HTTPCACHE_STORAGE = 'scrapy.extensions.httpcache.FilesystemCacheStorage'
 
-DOWNLOAD_DELAY = 1
+DOWNLOAD_DELAY = 0.5
 
 FEED_EXPORT_ENCODING = 'utf-8'
 
@@ -104,7 +104,7 @@ ITEM_PIPELINES = {
 }
 
 START_URLS = [
-    'https://www.hulu.jp/tiles/396'
+    'https://www.hulu.jp/tiles/424'
 ]
 #396 アニメ映画
 #424 国内ドラマ

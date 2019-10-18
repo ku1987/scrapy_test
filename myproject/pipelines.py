@@ -33,57 +33,78 @@ class Drama(Model):
 
 class MySQLPipeline:
   def open_spider(self, spider):
-    if not schema.has_table('dramas'):
-      with schema.create('dramas') as table:
-        table.increments('id')
-        table.string('title')
-        table.integer('year')
-        table.string('tag')
-        table.string('actor')
-        table.string('director')
-        table.string('detail')
-    # settings = spider.settings
+    schema.drop_if_exists('dramas')
+    # if not schema.has_table('dramas'):
+    with schema.create('dramas') as table:
+      table.increments('id')
+      table.string('title')
+      table.string('url')
+      table.string('img')
+      table.integer('year')
+      table.string('tag')
+      table.string('actor')
+      table.string('director')
+      table.long_text('detail')
+      table.datetime('hulu_updated_date')
+      table.boolean('hulu_flg').default(False)
+      table.boolean('fod_flg').default(False)
+      table.boolean('paravi_flg').default(False)
+      table.boolean('tsutaya_tv_flg').default(False)
+      table.boolean('amazon_prime_flg').default(False)
+      table.boolean('dtv_flg').default(False)
+      table.boolean('videopass_flg').default(False)
+      table.boolean('rakuten_tv_flg').default(False)
+      table.boolean('ranking_flg').default(False)
 
-    # params = {
-    #   'host':settings.get('MYSQL_HOST', 'localhost'),
-    #   # scraping.cjxaqn9ex6dq.us-east-1.rds.amazonaws.com
-    #   'db': settings.get('MYSQL_DATABASE', 'hulu_test'),
-    #   'user': settings.get('MYSQL_USER', 'user'),
-    #   'passwd': settings.get('MYSQL_PASSWORD', 'user'),
-    #   'charset': settings.get('MYSQL_CHARSET', 'utf8mb4'),
-    # }
-    # self.conn = MySQLdb.connect(**params)
-    # self.c = self.conn.cursor()
+  def process_item(self, item, spider): 
+    # タイトルで重複チェック
+    is_exists = Drama.where('title', item['title']).get().pluck('id')
 
-    # self.c.execute("""
-    #   create table if not exists `dramas` (
-    #     `id` integer not null auto_increment,
-    #     `title` varchar(255) not null,
-    #     `year` int DEFAULT '1900' not null,
-    #     `tag` varchar(255),
-    #     `actor` varchar(255),
-    #     `director` varchar(255),
-    #     `detail` TEXT,
-    #     primary key(`id`)
-    #   )
-    # """)
-    # self.conn.commit()
+    if is_exists:
+      is_exists = is_exists.get(0)
+      target_sql = 'update'
+    else:
+      target_sql = 'insert'
 
-  # def close_spider(self, spider):
-  #   self.conn.close()
+    if target_sql == 'insert':
+      dramas = Drama()
+      dramas.hulu_updated_date = item['updated_at'] if 'updated_at' in item else datetime.datetime.today()
+      dramas.title = item['title']
+      dramas.url = item['url']
+      dramas.img = item['img']
+      dramas.year = item['year']
+      dramas.tag = item['tag']
+      dramas.actor = item['actor']
+      dramas.director = item['director']
+      dramas.detail = item['detail']
+      dramas.hulu_flg = True
+      dramas.save()
 
-  def process_item(self, item, spider):
-    # self.c.execute('''
-    #               insert into `dramas` (`title`,`year`,`tag`,`actor`,`director`,`detail`) 
-    #               values (%(title)s,%(year)s,%(tag)s,%(actor)s,%(director)s,%(detail)s)
-    #               ''',
-    #               dict(item))
-    # self.conn.commit()
-    dramas = Drama()
-    dramas.title = item['title']
-    dramas.year = item['year']
-    dramas.tag = item['tag']
-    dramas.actor = item['actor']
-    dramas.director = item['director']
-    dramas.detail = item['detail']
-    dramas.save()
+    elif target_sql == 'update':
+      update_sql = {}
+      update_sql['hulu_flg'] = True
+      
+      if 'tag' in item:
+          update_sql['tag'] = item['tag']   
+      if 'url' in item:
+          update_sql['url'] = item['url']   
+      if 'img' in item:
+          update_sql['img'] = item['img']   
+      if 'year' in item:
+          update_sql['year'] = item['year'] 
+      if 'detail' in item:
+          update_sql['detail'] = item['detail']
+      if 'actor' in item:
+          update_sql['actor'] = item['actor']          
+      if 'director' in item:
+          update_sql['director'] = item['director']
+      if 'detail' in item:
+          update_sql['detail'] = item['detail']
+
+      update_sql['hulu_updated_date'] = item['updated_at'] if 'updated_at' in item else datetime.datetime.today()
+    
+      #更新対象があればupdate
+      if is_exists is not None:
+          if update_sql.keys :
+              Drama.where('id', int(is_exists)).update(update_sql)
+

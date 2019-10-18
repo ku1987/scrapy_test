@@ -25,11 +25,13 @@ class HuluSpider(CrawlSpider):
         
       item = Hulu(
         title = response.css('.vod-mod-detail-info02__title').xpath('string()').get().strip(),  
+        url = response.url,
+        img = response.css('body > div.vod-frm--user01 > main > div.vod-mod-key-visual > div.vod-mod-key-visual__inner > img::attr(src)').extract(),
         tag = ', '.join(array_tag),        
         year = int(re.findall(r'[0-9]{4}', year_str)[0]),
         actor = ', '.join(array_actor),
         director = ', '.join(array_director),
-        detail = response.css('.vod-mod-detail-info02__program-description p').xpath('string()').get()
+        detail = response.css('.vod-mod-detail-info02__program-description p::text').extract_first(),
       )
       yield item
 
